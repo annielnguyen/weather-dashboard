@@ -12,54 +12,112 @@
 <body>
     <!--Heading-->
         <div class="card-body bg-dark text-center text-white">
-            <div class="container"></div>
+            <div class="container">
             <h1>Weather Dashboard</h1>
+            </div>
         </div>
-      </div>
     
     <!--Search bar for city input-->
-    <div class="container-fluid"></div>
+    <h2>Search for a city:</h2>
+        <p id="inputContainer"><input type="text" id="city"></p>
+        <button type="button" class="searchButton" onclick="cityInfo()">Search</button>        
+  
+
+    <!-- <div class="container-fluid"></div>
     <h2>Search for a city:</h2>
     <div class="col-lg-3 bg-light"> 
     <div class="input">
-        <input type="text" class="city" placeholder="San Diego">
-        <button type="button" class="searchButton">search</button>
-      </div>
+        <input type="text" class="searchButton" id="city" placeholder="San Diego">
+        <button type="button" onclick="cityInfo()">Search</button> -->
+       
+      <!-- </div> -->
 
-    <!--Weather conditions/details-->
-    <div class= "display">
-        <h1 class="name"></h1>
-        <p class="temp"></p>
-        <p class="wind"></p>
-        <p class="humidity"></p>
-    </div>
-
-    <!--Clear Search History-->  
-        </button>
-        <button class="clearsearch">Clear History</button>
-      </div>  
-<!-- Jumbotron for current city-->
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-      <h1 class="display-4">Current City</h1>
-     
-    </div>
-  </div>
-
-    <!--5-Day Forecast Boxes-->
-    <div class=“container”>
-        <div class=“row”>
-            <h3>5-Day Forecast:</h3>
-          <div class=“col-sm-4”> Content </div>
-          <div class=“col-sm-4”> Content </div>
-          <div class=“col-sm-4”> Content </div>
-          <div class=“col-sm-4”> Content </div>
-          <div class=“col-sm-4”> Content </div>
+    
+    <!--Current weather display-->
+      <center>
+      <div class="card" style="width:80%">
+        <div class="card-body">
+          <h4 class="card-title">Date <span id="day1"></span></h6>
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg"/>
+          <p class="card-text">Temp:</p>
+          <p class="card-text">Wind:</p>
+          <p class="card-text">Humidity:</p>
+          <p class="card-text">UV Index:</p>
         </div>
       </div>
+      </center>
+ 
+        
+  <!--5-Day Forecast Boxes-->
+  <center>
+   <div class="card-deck" style="width:80%">
+      <div class="card bg-primary" style="width:20vh">
+        <div class="card-body">
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg">
+          <h6 class="card-title">Date <span id="day2"></span</h6>
+          <p class="temp">Temp:</p>
+          <p class="wind">Wind:</p>
+         <p class="humidity">Humidity:</p>
+         </div>
+      </div>
+      <div class="card-deck">
+      <div class="card bg-primary" style="width:20vh">
+        <div class="card-body">
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg">
+          <h6 class="name">Date</h5>
+          <p class="temp">Temp:</p>
+          <p class="wind">Wind:</p>
+          <p class="humidity">Humidity:</p>
+        </div>
+      </div>
+      <div class="card-deck">
+      <div class="card bg-primary" style="width:20vh">
+        <div class="card-body">
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg">
+          <h6 class="card-title">Date <span id="day3"></span</h6>
+          <p class="temp">Temp:</p>
+          <p class="wind">Wind:</p>
+          <p class="humidity">Humidity:</p>
+      </div>
+      </div>
+      <div class="card-deck">
+      <div class="card bg-primary" style="width:20vh">
+        <div class="card-body">
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg">
+          <h4 class="card-title">Date <span id="day4"></span</h6>
+          <p class="temp">Temp:</p>
+          <p class="wind">Wind:</p>
+          <p class="humidity">Humidity:</p>
+        </div>
+      </div>
+      <div class="card-deck">
+      <div class="card bg-primary" style="width:20vh">
+        <div class="card-body">
+          <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          class="current-weatherimg">
+          <h6 class="card-title">Date <span id="day5"></span</h6>
+           <p class="temp">Temp:</p>
+           <p class="wind">Wind:</p>
+           <p class="humidity">Humidity:</p>
+        </div>
+    </div>
+    </div> 
+  </center>
+    
+  
 
-        <!-- Start row -->
-        <div id="forecast" class="row"> 
+    
 
 </div>
 </body>

@@ -55,19 +55,21 @@ function updpateCards(daily, uvi) {
     "http://openweathermap.org/img/wn/" +
     daily[0]["weather"][0]["icon"] +
     "@2x.png";
-  uv_card.innerText = uvi;
-  temp_cards[0].innerText = daily[0]["temp"]["day"];
-  wind_cards[0].innerText = daily[0]["wind_speed"];
-  humidity_cards[0].innerText = daily[0]["humidity"];
+  uv_card.innerText = "UV: " + uvi;
+  temp_cards[0].innerText = "Temp: " + daily[0]["temp"]["day"] + "°F";
+  wind_cards[0].innerText = "Wind: " + daily[0]["wind_speed"] + "MPH";
+  humidity_cards[0].innerText = "Humidity: " + daily[0]["humidity"] + "%";
   icon_images[0].setAttribute("src", url);
   for (let i = 0; i < temp_cards.length - 1; ++i) {
     url =
       "http://openweathermap.org/img/wn/" +
       daily[i + 1]["weather"][0]["icon"] +
       "@2x.png";
-    temp_cards[i + 1].innerText = daily[i]["temp"]["day"];
-    humidity_cards[i + 1].innerText = daily[i]["humidity"];
-    wind_cards[i + 1].innerText = daily[i]["wind_speed"];
+    temp_cards[i + 1].innerText = "Temp: " + daily[i]["temp"]["day"] + "°F";
+    humidity_cards[i + 1].innerText =
+      "Humidity: " + daily[i]["humidity"] + " %";
+    wind_cards[i + 1].innerText = "Wind: " + daily[i]["wind_speed"] + "MPH";
+    icon_images[i + 1].setAttribute("src", url);
   }
 }
 function getCoord() {
@@ -91,6 +93,7 @@ function getUV(lat, lon) {
       lat +
       "&lon=" +
       lon +
+      "&units=imperial" +
       "&appid=" +
       API_KEY
   )

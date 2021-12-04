@@ -41,21 +41,36 @@ const API_KEY = "7d89c17a841147df895c4168b3b4dd3d";
 // });
 
 function cityInfo() {
-  getWeather();
+  getCoord();
 }
 //
 
-function updpateCards(temp, wind_speed, humidity, uvi) {
-  let cards = document.querySelectorAll(".card-body.temp");
-  for (let i = 0; i < cards.length; ++i) {
-    cards[i].innerText = temp;
-    cards[i].innerText = wind_speed;
-    cards[i].innerText = humidity;
-    cards[i].innerText = icon;
-    cards[i].innerText = uvi;
+function updpateCards(daily, uvi) {
+  let temp_cards = document.querySelectorAll(".temp");
+  let wind_cards = document.querySelectorAll(".wind");
+  let humidity_cards = document.querySelectorAll(".humidity");
+  let icon_images = document.querySelectorAll(".current-weatherimg");
+  let uv_card = document.querySelector(".uv");
+  let url =
+    "http://openweathermap.org/img/wn/" +
+    daily[0]["weather"][0]["icon"] +
+    "@2x.png";
+  uv_card.innerText = uvi;
+  temp_cards[0].innerText = daily[0]["temp"]["day"];
+  wind_cards[0].innerText = daily[0]["wind_speed"];
+  humidity_cards[0].innerText = daily[0]["humidity"];
+  icon_images[0].setAttribute("src", url);
+  for (let i = 0; i < temp_cards.length - 1; ++i) {
+    url =
+      "http://openweathermap.org/img/wn/" +
+      daily[i + 1]["weather"][0]["icon"] +
+      "@2x.png";
+    temp_cards[i + 1].innerText = daily[i]["temp"]["day"];
+    humidity_cards[i + 1].innerText = daily[i]["humidity"];
+    wind_cards[i + 1].innerText = daily[i]["wind_speed"];
   }
 }
-function getWeather() {
+function getCoord() {
   fetch(
     "https://api.openweathermap.org/data/2.5/weather?q=" +
       city.value +
@@ -66,18 +81,11 @@ function getWeather() {
     .then((data) => {
       //getting temp, wind, and humidity for five day forecast//
 
-      getUV(
-        data["coord"]["lat"],
-        data["coord"]["lon"],
-        data["main"]["temp"],
-        data["wind"]["speed"],
-        data["main"]["humidity"],
-        data["weather"]["icon"]
-      );
+      getUV(data["coord"]["lat"], data["coord"]["lon"]);
     });
 }
 
-function getUV(lat, long, temp, wind_speed, humidity, icon) {
+function getUV(lat, lon) {
   fetch(
     "https://api.openweathermap.org/data/2.5/onecall?lat=" +
       lat +
@@ -89,7 +97,9 @@ function getUV(lat, long, temp, wind_speed, humidity, icon) {
     .then((response) => response.json())
     .then((data) => {
       let uv = data["current"]["uvi"];
-      updpateCards(temp, wind_speed, humidity, icon, uv);
+
+      console.log(data);
+      updpateCards(data["daily"], uv);
     });
 }
 
@@ -114,7 +124,7 @@ function displayDay(day) {
   }
 }
 
-for (i = 0; i < 5; i++) {
+for (i = 0; i < 6; i++) {
   document.getElementById("day" + (i + 1).toString()).innerHTML =
     weekday[displayDay(i)];
 }

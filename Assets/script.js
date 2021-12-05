@@ -2,9 +2,15 @@
 // let searchButton = $(".searchButton");
 let city = $("#city")[0];
 const API_KEY = "7d89c17a841147df895c4168b3b4dd3d";
-
+let prevSearches = $(".prev-searches")[0];
 function cityInfo() {
   getCoord();
+}
+
+function getPrevSearch(event) {
+  let weather = JSON.parse(localStorage.getItem("weather"));
+  let city = event.target.innerText;
+  updpateCards(weather["daily"], weather["uv"]);
 }
 
 //get search history from local storage
@@ -64,24 +70,30 @@ function getUV(lat, lon) {
     .then((response) => response.json())
     .then((data) => {
       let uv = data["current"]["uvi"];
-
-      weather = {
+      let storage = localStorage.getItem("weather");
+      storage[city.value] = {
         daily: data["daily"],
         uv: uv,
       };
-      localStorage.setItem("weather", JSON.stringify(weather));
+      localStorage.setItem("weather", storage);
+      let button = document.createElement("button");
+      button.innerText = city.value;
+      button.addEventListener("click", getPrevSearch);
+      prevSearches.appendChild(button);
 
       updpateCards(data["daily"], uv);
     });
 }
 //display time and date
 
-var now = moment().format("MMM Do, YYYY, h:mm A");
-$("#day1").text(now);
-setInterval(() => {
-  now = moment().format("MMM Do, YYYY, h:mm A");
-  $("#day1").text(now);
-}, 60000);
+for (let i = 0; i < 6; ++i) {
+  let now = moment().add(i, "days").format("MM/DD/YYYY");
+  $("#day" + (i + 1).toString()).text(now);
+}
+// setInterval(() => {
+//   now = moment().format("MMM Do, YYYY, h:mm A");
+//   $("#day1").text(now);
+// }, 60000);
 
 // var today = new Date();
 
@@ -112,7 +124,7 @@ function displayDay(day) {
   }
 }
 
-for (i = 0; i < 6; i++) {
-  document.getElementById("day" + (i + 1).toString()).innerHTML =
-    weekday[displayDay(i)];
-}
+// for (i = 0; i < 6; i++) {
+//   document.getElementById("day" + (i + 1).toString()).innerHTML =
+//     weekday[displayDay(i)];
+// }

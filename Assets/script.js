@@ -1,5 +1,7 @@
-// //variables
-// let searchButton = $(".searchButton");
+window.onload = (event) => {
+  refreshPage();
+};
+//variables
 let city = $("#city")[0];
 const API_KEY = "7d89c17a841147df895c4168b3b4dd3d";
 let prevSearches = $(".prev-searches")[0];
@@ -7,15 +9,30 @@ function cityInfo() {
   getCoord();
 }
 
+function refreshPage() {
+  let storage = localStorage.getItem("weather");
+
+  if (storage == null) {
+    return;
+  } else {
+    storage = JSON.parse(storage);
+    let entries = Object.entries(storage);
+    for (let i = 0; i < entries.length; ++i) {
+      console.log(entries);
+      addPrevSearchElement(entries[i][0]);
+    }
+  }
+}
+console.log(JSON.parse(localStorage.getItem("weather")));
+
+//function for storing previous searches
 function getPrevSearch(event) {
   let weather = JSON.parse(localStorage.getItem("weather"));
-  let city = event.target.innerText;
-  updpateCards(weather["daily"], weather["uv"]);
+  let name = event.target.innerText;
+  updpateCards(weather[name]["daily"], weather[name]["uv"]);
 }
 
-//get search history from local storage
-
-console.log(JSON.parse(localStorage.getItem("weather")));
+//displaying weather info for each card
 
 function updpateCards(daily, uvi) {
   let temp_cards = document.querySelectorAll(".temp");
@@ -28,6 +45,13 @@ function updpateCards(daily, uvi) {
     daily[0]["weather"][0]["icon"] +
     "@2x.png";
   uv_card.innerText = "UV: " + uvi;
+  if (uvi < 3) {
+    uv_card.style.backgroundColor = "green";
+  } else if (uvi <= 5) {
+    uv_card.style.backgroundColor = "yellow";
+  } else {
+    uv_card.style.backgroundColor = "orange";
+  }
   temp_cards[0].innerText = "Temp: " + daily[0]["temp"]["day"] + "°F";
   wind_cards[0].innerText = "Wind: " + daily[0]["wind_speed"] + " MPH";
   humidity_cards[0].innerText = "Humidity: " + daily[0]["humidity"] + "%";
@@ -44,6 +68,7 @@ function updpateCards(daily, uvi) {
     icon_images[i + 1].setAttribute("src", url);
   }
 }
+//Getting coordinates
 function getCoord() {
   fetch(
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -57,6 +82,7 @@ function getCoord() {
     });
 }
 
+//get UVI
 function getUV(lat, lon) {
   fetch(
     "https://api.openweathermap.org/data/2.5/onecall?lat=" +
@@ -70,38 +96,41 @@ function getUV(lat, lon) {
     .then((response) => response.json())
     .then((data) => {
       let uv = data["current"]["uvi"];
-      let storage = localStorage.getItem("weather");
-      storage[city.value] = {
-        daily: data["daily"],
-        uv: uv,
-      };
-      localStorage.setItem("weather", storage);
-      let button = document.createElement("button");
-      button.innerText = city.value;
-      button.addEventListener("click", getPrevSearch);
-      prevSearches.appendChild(button);
+      let storage = JSON.parse(localStorage.getItem("weather"));
+      if (storage == null) {
+        let name = city.value;
+        let item = {};
+        item[name] = {
+          daily: data["daily"],
+          uv: uv,
+        };
+        console.log(item);
 
+        localStorage.setItem("weather", JSON.stringify(item));
+      } else {
+        storage[city.value] = {
+          daily: data["daily"],
+          uv: uv,
+        };
+        localStorage.setItem("weather", JSON.stringify(storage));
+      }
+      addPrevSearchElement(city.value);
       updpateCards(data["daily"], uv);
     });
 }
+function addPrevSearchElement(name) {
+  let button = document.createElement("button");
+  button.innerText = name;
+  button.addEventListener("click", getPrevSearch);
+  prevSearches.appendChild(button);
+}
+
 //display time and date
 
 for (let i = 0; i < 6; ++i) {
   let now = moment().add(i, "days").format("MM/DD/YYYY");
   $("#day" + (i + 1).toString()).text(now);
 }
-// setInterval(() => {
-//   now = moment().format("MMM Do, YYYY, h:mm A");
-//   $("#day1").text(now);
-// }, 60000);
-
-// var today = new Date();
-
-// var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-// var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-// var dateTime = date+' '+time;
 
 //Display day of week for forecast
 var d = new Date();
@@ -123,8 +152,3 @@ function displayDay(day) {
     return day + d.getDay();
   }
 }
-
-// for (i = 0; i < 6; i++) {
-//   document.getElementById("day" + (i + 1).toString()).innerHTML =
-//     weekday[displayDay(i)];
-// }

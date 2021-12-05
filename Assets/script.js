@@ -2,48 +2,14 @@
 // let searchButton = $(".searchButton");
 let city = $("#city")[0];
 const API_KEY = "7d89c17a841147df895c4168b3b4dd3d";
-// let name = $(".name")[0];
-// let temp = $(".temp")[0];
-// let wind = $(".wind")[0];
-// let humidity = $(".humidity")[0];
-// let UVIndex = $(".uvIndex")[0];
-// let dateToday= $(".today")[0];
-
-// //add an event listener
-// $(".searchButton").click(function () {
-//   //construct a Querry URL to make API call
-//   var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" +
-//     city.value +
-//     "&appid=" +
-//     APIKey;
-
-//   //make API call using fetch
-//   fetch(queryURL)
-
-//   let lat =document.getElementById('latitude').value;
-//   let lon =document.getElementById('longitude').value;
-//   let units= 'imperial';
-
-// .then((argument) => argument.json())
-//     .then((data) => {
-//       let nameValue = data["name"];
-//       //convert Kelvin into Farenheit//
-//       let tempValue = ((parseInt(data["main"]["temp"]) - 273.15) * 9) / 5 + 32;
-//       let windValue = data["wind"]["speed"];
-//       let humidityValue = data["main"]["humidity"];
-//       console.log(nameValue);
-//       name.innerText = nameValue;
-//       temp.innerText = Math.round(tempValue.toString());
-//       wind.innerText = windValue;
-//       humidity.innerText = humidityValue;
-//     })
-//     .catch((err) => alert("Please enter a valid city name"));
-// });
 
 function cityInfo() {
   getCoord();
 }
-//
+
+//get search history from local storage
+
+console.log(JSON.parse(localStorage.getItem("weather")));
 
 function updpateCards(daily, uvi) {
   let temp_cards = document.querySelectorAll(".temp");
@@ -81,8 +47,6 @@ function getCoord() {
   )
     .then((response) => response.json())
     .then((data) => {
-      //getting temp, wind, and humidity for five day forecast//
-
       getUV(data["coord"]["lat"], data["coord"]["lon"]);
     });
 }
@@ -101,10 +65,31 @@ function getUV(lat, lon) {
     .then((data) => {
       let uv = data["current"]["uvi"];
 
-      console.log(data);
+      weather = {
+        daily: data["daily"],
+        uv: uv,
+      };
+      localStorage.setItem("weather", JSON.stringify(weather));
+
       updpateCards(data["daily"], uv);
     });
 }
+//display time and date
+
+var now = moment().format("MMM Do, YYYY, h:mm A");
+$("#day1").text(now);
+setInterval(() => {
+  now = moment().format("MMM Do, YYYY, h:mm A");
+  $("#day1").text(now);
+}, 60000);
+
+// var today = new Date();
+
+// var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+// var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+// var dateTime = date+' '+time;
 
 //Display day of week for forecast
 var d = new Date();

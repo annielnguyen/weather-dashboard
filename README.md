@@ -9,6 +9,9 @@ This is a weather dashboard application. Users can enter a city and the forecast
 https://annielnguyen.github.io/weather-dashboard/
 https://github.com/annielnguyen/weather-dashboard
 
+# Languages and Technologies Used
+HTML,CSS, JQuery, Bootstrap
+
 # Contact Creator
 Annie Nguyen -- UCLA Coding Bootcamp
 anguyen.aln@gmail.com 
